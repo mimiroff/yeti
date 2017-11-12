@@ -7,6 +7,19 @@ $bets = [
     ['name' => 'Евгений', 'price' => 10500, 'ts' => strtotime('-' . rand(25, 50) .' hour')],
     ['name' => 'Семён', 'price' => 10000, 'ts' => strtotime('last week')]
 ];
+$get_past_time = function ($timestamp) {
+    $cur_time = strtotime('now');
+    $time_past = $cur_time - $timestamp;
+    $time;
+    if ($time_past >= 86400) {
+        $time = date('d.m.y в H:i', $timestamp);
+    } elseif ($time_past < 3600) {
+        $time = (string)(floor($time_past / 60) . ' минут назад'); 
+    } else {
+        $time = (string)(floor($time_past / 3600) . ' часов назад');
+    }
+    return $time;
+};
 ?>
 
 <!DOCTYPE html>
@@ -108,14 +121,19 @@ $bets = [
                     </form>
                 </div>
                 <div class="history">
-                    <h3>История ставок (<span>4</span>)</h3>
-                    <!-- заполните эту таблицу данными из массива $bets-->
+                    <?php
+                        $bets_count = count($bets);
+                        $cur_bet = 0;
+                    ?>
+                    <h3>История ставок (<span><?=$bets_count?></span>)</h3>
                     <table class="history__list">
-                        <tr class="history__item">
-                            <td class="history__name"><!-- имя автора--></td>
-                            <td class="history__price"><!-- цена--> р</td>
-                            <td class="history__time"><!-- дата в человеческом формате--></td>
-                        </tr>
+                        <?php while ($cur_bet < $bets_count) { ?>
+                            <tr class="history__item">
+                                <td class="history__name"><?=$bets[$cur_bet]['name'];?></td>
+                                <td class="history__price"><?=number_format($bets[$cur_bet]['price'], 0, ',', ' ') . ' р';?></td>
+                                <td class="history__time"><?=$get_past_time($bets[$cur_bet]['ts']);?></td>
+                            </tr>
+                        <?php $cur_bet++; } ?>
                     </table>
                 </div>
             </div>
