@@ -9,15 +9,13 @@ $bets = [
 ];
 function get_past_time ($timestamp) {
     $time_past = time() - $timestamp;
-    $time;
     if ($time_past >= 86400) {
-        $time = date('d.m.y в H:i', $timestamp);
+        return date('d.m.y в H:i', $timestamp);
     } elseif ($time_past < 3600) {
-        $time = (string)floor($time_past / 60) . ' минут назад'; 
+        return (string)floor($time_past / 60) . ' минут назад'; 
     } else {
-        $time = (string)floor($time_past / 3600) . ' часов назад';
+        return (string)floor($time_past / 3600) . ' часов назад';
     }
-    return $time;
 };
 ?>
 
