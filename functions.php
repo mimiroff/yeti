@@ -11,9 +11,9 @@ function renderTemplate ($template_path, $data) {
         } else {
             return '';
         }
- };
+};
 
- function get_past_time ($timestamp) {
+function get_past_time ($timestamp) {
     $time_past = time() - $timestamp;
     if ($time_past >= 86400) {
         return date('d.m.y в H:i', $timestamp);
@@ -23,4 +23,8 @@ function renderTemplate ($template_path, $data) {
         return (string)floor($time_past / 3600) . ' часов назад';
     }
 };
+
+function validateNumber($value) {
+    return filter_var($value, FILTER_VALIDATE_FLOAT);
+}
  ?>
