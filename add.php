@@ -44,7 +44,7 @@ if (count($errors)) {
                 'picture_url' => $file_url
                 ];
     $item_index = count($goods) - 1;
-    $page_content = renderTemplate('./templates/lot.php', ['categories' => $categories, 'goods' => $goods, 'bets' => $bets, 'item_index' => $item_index]);
+    $page_content = renderTemplate('./templates/lot.php', ['categories' => $categories, 'item' => $goods[$item_index], 'bets' => $bets]);
 }
 $layout_content = renderTemplate('./templates/layout.php', ['title' => 'Yeti Cave', 'content' => $page_content, 'categories' => $categories, 'user_avatar' => $user_avatar, 'user_name' => $user_name, 'is_auth' => $is_auth]);
 print($layout_content);
