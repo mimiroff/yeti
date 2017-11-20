@@ -6,7 +6,9 @@ $required = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-dat
 $rules = ['lot-rate' => 'validateNumber', 'lot-step' => 'validateNumber'];
 $errors = [];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    $page_content = renderTemplate('./templates/add-lot.php', ['categories' => $categories]);
+} elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $item = $_POST;
 
     if(isset($_FILES['file']['name'])) {
@@ -22,30 +24,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors[$key] = 'Это поле необходимо заполнить';
         }
 
-        if (in_array($key, $rules)) {
-            $result = call_user_func('validateNumber', $value);
+        if (array_key_exists($key, $rules) && $item[$key] != '') {
+            $result = call_user_func($rules[$key], $value);
 
-            if (!result) {
+            if (!$result) {
                 $errors[$key] = 'Введите данные в формате чисел';
             }
         }
+        
+    }
+
+    if (count($errors)) {
+        $page_content = renderTemplate('./templates/add-lot.php', ['categories' => $categories, 'item' => $item, 'errors' => $errors]);
+    } else {
+        $goods[] = ['title' => $item['lot-name'],
+                    'category' => $item['category'],
+                    'description' => $item['message'],
+                    'price' => $item['lot-rate'],
+                    'step' => $item['lot-step'],
+                    'date' => $item['lot-date'],
+                    'picture_url' => $file_url
+                    ];
+        $item_id = count($goods) - 1;
+        $page_content = renderTemplate('./templates/lot.php', ['categories' => $categories, 'item' => $goods[$item_id], 'bets' => $bets]);
     }
 }
 
-if (count($errors)) {
-    $page_content = renderTemplate('./templates/add-lot.php', ['categories' => $categories, 'item' => $item, 'errors' => $errors]);
-} else {
-    $goods[] = ['title' => $item['lot-name'],
-                'category' => $item['category'],
-                'description' => $item['message'],
-                'price' => $item['lot-rate'],
-                'step' => $item['lot-step'],
-                'date' => $item['lot-date'],
-                'picture_url' => $file_url
-                ];
-    $item_index = count($goods) - 1;
-    $page_content = renderTemplate('./templates/lot.php', ['categories' => $categories, 'item' => $goods[$item_index], 'bets' => $bets]);
-}
 $layout_content = renderTemplate('./templates/layout.php', ['title' => 'Yeti Cave', 'content' => $page_content, 'categories' => $categories, 'user_avatar' => $user_avatar, 'user_name' => $user_name, 'is_auth' => $is_auth]);
 print($layout_content);
 ?>

@@ -20,25 +20,23 @@
     $error_message = isset($errors['lot-name']) ? $errors['lot-name'] : '';?>
       <div class="form__item <?=$classname;?>"> <!-- form__item--invalid -->
         <label for="lot-name">Наименование</label>
-        <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" value="<?=$value;?>">
+        <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" value="<?=$value;?>" required>
         <span class="form__error"><?=$error_message;?></span>
       </div>
       <?php $classname = isset($errors['category']) ? 'form__item--invalid' : '';
       $value = isset($item['category']) ? $item['category'] : '';
-      $error_message = isset($errors['category']) ? $errors['category'] : '';?>
+      $error_message = isset($errors['category']) ? $errors['category'] : '';
+      $attr = (!$value) ? 'selected' : '';?>
       <div class="form__item <?=$classname;?>">
         <label for="category">Категория</label>
-        <select id="category" name="category">
-        <?php if($value): ?>
-          <option><?=$value;?></option>
-        <?php endif;?>  
-          <option>Выберите категорию</option>
-          <option>Доски и лыжи</option>
-          <option>Крепления</option>
-          <option>Ботинки</option>
-          <option>Одежда</option>
-          <option>Инструменты</option>
-          <option>Разное</option>
+        <select id="category" name="category" required>
+          <option <?=$attr?>>Выберите категорию</option>
+          <?php
+            $cur_element = 0;
+            while ($cur_element < $element_count) { 
+              $attr = ($value == $categories[$cur_element]) ? 'selected' : '';?>
+          <option <?=$attr;?>><?=$categories[$cur_element];?></option>
+          <?php $cur_element++; } ?>       
         </select>
         <span class="form__error"><?=$error_message;?></span>
       </div>
@@ -48,7 +46,7 @@
     $error_message = isset($errors['message']) ? $errors['message'] : '';?>
     <div class="form__item form__item--wide <?=$classname;?>">
       <label for="message">Описание</label>
-      <textarea id="message" name="message" placeholder="Напишите описание лота"><?=$value;?></textarea>
+      <textarea id="message" name="message" placeholder="Напишите описание лота" required><?=$value;?></textarea>
       <span class="form__error"><?=$error_message;?></span>
     </div>
     <div class="form__item form__item--file"> <!-- form__item--uploaded -->
@@ -72,7 +70,7 @@
     $error_message = isset($errors['lot-rate']) ? $errors['lot-rate'] : '';?>
       <div class="form__item form__item--small <?=$classname;?>">
         <label for="lot-rate">Начальная цена</label>
-        <input id="lot-rate" type="number" name="lot-rate" placeholder="0" value="<?=$value;?>">
+        <input id="lot-rate" type="number" name="lot-rate" placeholder="0" value="<?=$value;?>" required>
         <span class="form__error"><?=$error_message;?></span>
       </div>
       <?php $classname = isset($errors['lot-step']) ? 'form__item--invalid' : '';
@@ -80,7 +78,7 @@
       $error_message = isset($errors['lot-step']) ? $errors['lot-step'] : '';?>
       <div class="form__item form__item--small <?=$classname;?>">
         <label for="lot-step">Шаг ставки</label>
-        <input id="lot-step" type="number" name="lot-step" placeholder="0" value="<?=$value;?>">
+        <input id="lot-step" type="number" name="lot-step" placeholder="0" value="<?=$value;?>" required>
         <span class="form__error"><?=$error_message;?></span>
       </div>
       <?php $classname = isset($errors['lot-date']) ? 'form__item--invalid' : '';
@@ -88,7 +86,7 @@
       $error_message = isset($errors['lot-date']) ? $errors['lot-date'] : '';?>
       <div class="form__item <?=$classname;?>">
         <label for="lot-date">Дата окончания торгов</label>
-        <input class="form__input-date" id="lot-date" type="date" name="lot-date" value="<?=$value;?>">
+        <input class="form__input-date" id="lot-date" type="date" name="lot-date" value="<?=$value;?>" required>
         <span class="form__error"><?=$error_message;?></span>
       </div>
     </div>
