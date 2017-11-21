@@ -5,6 +5,13 @@ require_once('data.php');
 $required = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
 $rules = ['lot-rate' => 'validateNumber', 'lot-step' => 'validateNumber'];
 $errors = [];
+$errors_messages = ['lot-name' => 'Введите наименование товара',
+                    'category' => 'Выберите категорию товара',
+                    'message' => 'Оставьте описание товара',
+                    'lot-rate' => 'Укажите начальную цену',
+                    'lot-step' => 'Укажите шаг цены',
+                    'lot-date' => 'Укажите срок размещения товара',
+                    'validateNumber' => 'Допускаются только цифры (0-9)'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $page_content = renderTemplate('./templates/add-lot.php', ['categories' => $categories]);
@@ -21,14 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     foreach ($item as $key => $value) {
         if (in_array($key, $required) && $value == '' || $key == 'category' && !in_array($value, $categories)) {
-            $errors[$key] = 'Это поле необходимо заполнить';
+            $errors[$key] = $errors_messages[$key];
         }
 
         if (array_key_exists($key, $rules) && $item[$key] != '') {
             $result = call_user_func($rules[$key], $value);
 
             if (!$result) {
-                $errors[$key] = 'Введите данные в формате чисел';
+                $errors[$key] = $errors_messages[$rules[$key]];
             }
         }
         
