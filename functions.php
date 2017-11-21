@@ -26,5 +26,5 @@ function get_past_time ($timestamp) {
 
 function validateNumber($value) {
     return filter_var($value, FILTER_VALIDATE_FLOAT);
-}
+};
  ?>
