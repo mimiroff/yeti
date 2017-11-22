@@ -1,6 +1,9 @@
 <?php
 require_once('functions.php');
 require_once('data.php');
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
 $required = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
 $rules = ['lot-rate' => 'validateNumber', 'lot-step' => 'validateNumber'];
@@ -14,7 +17,14 @@ $errors_messages = ['lot-name' => 'Введите наименование то�
                     'validateNumber' => 'Допускаются только цифры (0-9)'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $page_content = renderTemplate('./templates/add-lot.php', ['categories' => $categories]);
+    if(!isset($_SESSION['user'])) {
+        $title = 403;
+        http_response_code($title);
+        $page_content = renderTemplate('./templates/error.php', ['message' => 'Доступ запрещён']);
+    } else {
+        $title = 'Добавить лот';
+        $page_content = renderTemplate('./templates/add-lot.php', ['categories' => $categories]);
+    }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $item = $_POST;
 
@@ -53,10 +63,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     'picture_url' => $file_url
                     ];
         $item_id = count($goods) - 1;
+        $title = $item['lot-name'];
         $page_content = renderTemplate('./templates/lot.php', ['categories' => $categories, 'item' => $goods[$item_id], 'bets' => $bets]);
     }
 }
 
-$layout_content = renderTemplate('./templates/layout.php', ['title' => 'Yeti Cave', 'content' => $page_content, 'categories' => $categories, 'user_avatar' => $user_avatar, 'user_name' => $user_name, 'is_auth' => $is_auth]);
+$layout_content = renderTemplate('./templates/layout.php', ['title' => $title, 'content' => $page_content, 'categories' => $categories, 'user_avatar' => $user_avatar, 'user_name' => $user_name, 'is_auth' => $is_auth]);
 print($layout_content);
 ?>

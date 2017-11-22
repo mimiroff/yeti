@@ -27,4 +27,19 @@ function get_past_time ($timestamp) {
 function validateNumber($value) {
     return filter_var($value, FILTER_VALIDATE_FLOAT);
 };
+
+function validateEmail($value) {
+    return filter_var($value, FILTER_VALIDATE_EMAIL);
+};
+
+function searchUserByEmail($email, $users) {
+  $result = null;
+  foreach ($users as $user) {
+      if ($user['email'] == $email) {
+          $result = $user;
+          break;
+      }
+  }
+  return $result;
+};
  ?>

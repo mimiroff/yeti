@@ -1,5 +1,8 @@
 <nav class="nav">
     <?php
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+        }
         $element_count = count($categories);
         $cur_element = 0;
     ?>
@@ -31,6 +34,7 @@
                     равнодушным.';?></p>
             </div>
             <div class="lot-item__right">
+                <?php if (isset($_SESSION['user'])): ?>
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer">
                         <?=$item['date'] ?? $lot_time_remaining;?>
@@ -61,6 +65,7 @@
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
                 </div>
+                <?php endif;?>
                 <div class="history">
                     <?php
                         $bets_count = count($bets);
