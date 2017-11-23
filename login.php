@@ -13,37 +13,38 @@ $errors_messages = ['required' => ['email' => 'Введите свой email',
                     'auth' => ['email' => 'Такой пользователь не найден',
                                'password' => 'Вы ввели неверный пароль']];
 $title = 'Вход';
-$user = null;
+$user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
-if (!isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] == 'GET') {
-    $page_content = renderTemplate('./templates/login.php', ['categories' => $categories]);
-} elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $fields = $_POST;
+if (!$user) {
+    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+        $page_content = renderTemplate('./templates/login.php', ['categories' => $categories]);
+    } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $fields = $_POST;
 
-    foreach ($fields as $key => $value) {
-        if (in_array($key, $required) && $value == '') {
-            $errors[$key] = $errors_messages['required'][$key];
-        }
-    }
-    if (!count($errors)) {
-        if ($user = searchUserByEmail($fields['email'], $users)) {
-            if (password_verify($fields['password'], $user['password'])) {
-                $_SESSION['user'] = $user;
-                $_SESSION['user']['user_pic'] = $user_avatar;
-            } else {
-                $errors['password'] = $errors_messages['auth']['password'];
+        foreach ($fields as $key => $value) {
+            if (in_array($key, $required) && $value == '') {
+                $errors[$key] = $errors_messages['required'][$key];
             }
-        } else {
-            $errors['email'] = $errors_messages['auth']['email'];
         }
-    }
+        if (!count($errors)) {
+            if ($user = searchUserByEmail($fields['email'], $users)) {
+                if (password_verify($fields['password'], $user['password'])) {
+                    $user['user_pic'] = $user_avatar;
+                    $_SESSION['user'] = $user;
+                } else {
+                    $errors['password'] = $errors_messages['auth']['password'];
+                }
+            } else {
+                $errors['email'] = $errors_messages['auth']['email'];
+            }
+        }
 
-    if (count($errors)) {
-        $page_content = renderTemplate('./templates/login.php', ['categories' => $categories, 'fields' => $fields, 'errors' => $errors]);
-    } else {
-        $user = $_SESSION['user'];
-        header("Location: /index.php");
-        exit();
+        if (count($errors)) {
+            $page_content = renderTemplate('./templates/login.php', ['categories' => $categories, 'fields' => $fields, 'errors' => $errors]);
+        } else {
+            header("Location: /index.php");
+            exit();
+        }
     }
 } else {
     header("Location: /index.php");

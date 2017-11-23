@@ -18,57 +18,58 @@ $errors_messages = ['lot-name' => 'Введите наименование то�
 
 $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    if(!isset($_SESSION['user'])) {
-        $title = 403;
-        http_response_code($title);
-        $page_content = renderTemplate('./templates/error.php', ['message' => 'Доступ запрещён']);
-    } else {
+if(!$user) {
+    $title = 403;
+    http_response_code($title);
+    $page_content = renderTemplate('./templates/error.php', ['message' => 'Доступ запрещён']);
+} else {
+    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $title = 'Добавить лот';
         $page_content = renderTemplate('./templates/add-lot.php', ['categories' => $categories]);
-    }
-} elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $item = $_POST;
+    } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $item = $_POST;
 
-    if(isset($_FILES['file']['name'])) {
-        $file_name = $_FILES['file']['name'];
-        $path = 'img/';
-        $file_url = str_replace(' ', '', $path . $file_name);
+        if(isset($_FILES['file']['name'])) {
+            $file_name = $_FILES['file']['name'];
+            $path = 'img/';
+            $file_url = str_replace(' ', '', $path . $file_name);
 
-        move_uploaded_file($_FILES['file']['tmp_name'], $file_url);
-    }
-
-    foreach ($item as $key => $value) {
-        if (in_array($key, $required) && $value == '' || $key == 'category' && !in_array($value, $categories)) {
-            $errors[$key] = $errors_messages[$key];
+            move_uploaded_file($_FILES['file']['tmp_name'], $file_url);
         }
 
-        if (array_key_exists($key, $rules) && $item[$key] != '') {
-            $result = call_user_func($rules[$key], $value);
-
-            if (!$result) {
-                $errors[$key] = $errors_messages[$rules[$key]];
+        foreach ($item as $key => $value) {
+            if (in_array($key, $required) && $value == '' || $key == 'category' && !in_array($value, $categories)) {
+                $errors[$key] = $errors_messages[$key];
             }
-        }
-        
-    }
 
-    if (count($errors)) {
-        $page_content = renderTemplate('./templates/add-lot.php', ['categories' => $categories, 'item' => $item, 'errors' => $errors]);
-    } else {
-        $goods[] = ['title' => $item['lot-name'],
-                    'category' => $item['category'],
-                    'description' => $item['message'],
-                    'price' => $item['lot-rate'],
-                    'step' => $item['lot-step'],
-                    'date' => $item['lot-date'],
-                    'picture_url' => $file_url
-                    ];
-        $item_id = count($goods) - 1;
-        $title = $item['lot-name'];
-        $page_content = renderTemplate('./templates/lot.php', ['categories' => $categories, 'item' => $goods[$item_id], 'bets' => $bets, 'user' => $user]);
+            if (array_key_exists($key, $rules) && $item[$key] != '') {
+                $result = call_user_func($rules[$key], $value);
+
+                if (!$result) {
+                    $errors[$key] = $errors_messages[$rules[$key]];
+                }
+            }
+
+        }
+
+        if (count($errors)) {
+            $page_content = renderTemplate('./templates/add-lot.php', ['categories' => $categories, 'item' => $item, 'errors' => $errors]);
+        } else {
+            $goods[] = ['title' => $item['lot-name'],
+                'category' => $item['category'],
+                'description' => $item['message'],
+                'price' => $item['lot-rate'],
+                'step' => $item['lot-step'],
+                'date' => $item['lot-date'],
+                'picture_url' => $file_url
+            ];
+            $item_id = count($goods) - 1;
+            $title = $item['lot-name'];
+            $page_content = renderTemplate('./templates/lot.php', ['categories' => $categories, 'item' => $goods[$item_id], 'bets' => $bets, 'user' => $user]);
+        }
     }
 }
+
 
 $layout_content = renderTemplate('./templates/layout.php', ['title' => $title, 'content' => $page_content, 'categories' => $categories, 'user' => $user]);
 print($layout_content);
