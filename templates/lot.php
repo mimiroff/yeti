@@ -31,6 +31,7 @@
                     равнодушным.';?></p>
             </div>
             <div class="lot-item__right">
+                <?php if ($user): ?>
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer">
                         <?=$item['date'] ?? $lot_time_remaining;?>
@@ -61,6 +62,7 @@
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
                 </div>
+                <?php endif;?>
                 <div class="history">
                     <?php
                         $bets_count = count($bets);
