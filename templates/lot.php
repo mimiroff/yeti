@@ -1,8 +1,5 @@
 <nav class="nav">
     <?php
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-        session_start();
-        }
         $element_count = count($categories);
         $cur_element = 0;
     ?>
@@ -34,7 +31,7 @@
                     равнодушным.';?></p>
             </div>
             <div class="lot-item__right">
-                <?php if (isset($_SESSION['user'])): ?>
+                <?php if ($user): ?>
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer">
                         <?=$item['date'] ?? $lot_time_remaining;?>

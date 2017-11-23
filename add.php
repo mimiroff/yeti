@@ -16,6 +16,8 @@ $errors_messages = ['lot-name' => 'Введите наименование то�
                     'lot-date' => 'Укажите срок размещения товара',
                     'validateNumber' => 'Допускаются только цифры (0-9)'];
 
+$user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if(!isset($_SESSION['user'])) {
         $title = 403;
@@ -64,10 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     ];
         $item_id = count($goods) - 1;
         $title = $item['lot-name'];
-        $page_content = renderTemplate('./templates/lot.php', ['categories' => $categories, 'item' => $goods[$item_id], 'bets' => $bets]);
+        $page_content = renderTemplate('./templates/lot.php', ['categories' => $categories, 'item' => $goods[$item_id], 'bets' => $bets, 'user' => $user]);
     }
 }
 
-$layout_content = renderTemplate('./templates/layout.php', ['title' => $title, 'content' => $page_content, 'categories' => $categories, 'user_avatar' => $user_avatar, 'user_name' => $user_name, 'is_auth' => $is_auth]);
+$layout_content = renderTemplate('./templates/layout.php', ['title' => $title, 'content' => $page_content, 'categories' => $categories, 'user' => $user]);
 print($layout_content);
 ?>
