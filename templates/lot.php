@@ -3,13 +3,13 @@
         $element_count = count($categories);
         $cur_element = 0;
     ?>
-    <ul class="nav__list container">
-        <?php while ($cur_element < $element_count) { ?>
-        <li class="nav__item">
-            <a href=""><?=$categories[$cur_element];?></a>
-        </li>
-        <?php $cur_element++; } ?>
-    </ul>
+        <ul class="nav__list container">
+            <?php while ($cur_element < $element_count) { ?>
+                <li class="nav__item">
+                    <a href=""><?=$categories[$cur_element];?></a>
+                </li>
+            <?php $cur_element++; } ?>
+        </ul>
     </nav>
     <section class="lot-item container">
         <h2><?=$item['title'];?></h2>
@@ -31,7 +31,7 @@
                     равнодушным.';?></p>
             </div>
             <div class="lot-item__right">
-                <?php if ($user): ?>
+                <?php if ($user && !$is_bet): ?>
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer">
                         <?=$item['date'] ?? $lot_time_remaining;?>
@@ -49,7 +49,7 @@
                             <?php endif;?>
                         </div>
                     </div>
-                    <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post">
+                    <form class="lot-item__form" action="../lot.php" method="post">
                         <p class="lot-item__form-item">
                             <label for="cost">Ваша ставка</label>
                             <input id="cost" type="number" name="cost"
@@ -59,6 +59,7 @@
                             placeholder="12 000"
                             <?php endif;?>>
                         </p>
+                        <input type="hidden" name="lot-id" value="<?=$item['id'];?>">
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
                 </div>
