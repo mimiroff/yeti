@@ -27,7 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $page_content = renderTemplate('./templates/error.php', ['message' => 'Страница не найдена']);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && $user) {
-    $bet = $_POST;
+    $bet['cost'] = $_POST['cost'];
+    $bet['lot-id'] = $_POST['lot-id'];
     $bet['time'] = time();
     $result = call_user_func('validateNumber', $bet['cost']);
     if (!$result) {
