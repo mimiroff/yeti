@@ -16,7 +16,7 @@
         <div class="lot-item__content">
             <div class="lot-item__left">
                 <div class="lot-item__image">
-                    <img src=<?=$item['picture_url'];?> width="730" height="548" alt="Сноуборд">
+                    <img src=<?=$item['picture_url'];?> width="730" height="548" alt="<?=$item['title'];?>">
                 </div>
                 <p class="lot-item__category">Категория: <span><?=$item['category'];?></span></p>
                 <p class="lot-item__description"><?=$item['description']  ?? 'Легкий маневренный сноуборд, готовый дать жару в любом парке, растопив
@@ -49,8 +49,11 @@
                             <?php endif;?>
                         </div>
                     </div>
-                    <form class="lot-item__form" action="../lot.php" method="post">
-                        <p class="lot-item__form-item">
+                    <?php $classname = isset($errors) ? 'form--invalid' : '';?>
+                    <form class="lot-item__form <?=$classname;?>" action="lot.php" method="post">
+                        <?php $classname = isset($errors['cost']) ? 'form__item--invalid' : '';
+                        $error_message = isset($errors['cost']) ? $errors['cost'] : '';?>
+                        <p class="lot-item__form-item <?=$classname;?>">
                             <label for="cost">Ваша ставка</label>
                             <input id="cost" type="number" name="cost"
                             <?php if(array_key_exists('step', $item)): ?>
@@ -58,6 +61,7 @@
                             <?php else: ?>
                             placeholder="12 000"
                             <?php endif;?>>
+                            <span class="form__error"><?=$error_message;?></span>
                         </p>
                         <input type="hidden" name="lot-id" value="<?=$item['id'];?>">
                         <button type="submit" class="button">Сделать ставку</button>

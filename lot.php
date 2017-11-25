@@ -4,12 +4,15 @@ require_once('functions.php');
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
+$errors = [];
 $mybets = isset($_COOKIE['mylots']) ? json_decode($_COOKIE['mylots'], true) : [];
 $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+$item_id = isset($_SESSION['item_id']) ? $_SESSION['item_id'] : null;;
+$is_bet =false;
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($_GET['item_id']) && array_key_exists($_GET['item_id'], $goods)) {
-        $item_id = $_GET['item_id'];
-        $is_bet = false;
+        $_SESSION['item_id'] = $_GET['item_id'];
+        $item_id = $_SESSION['item_id'];
         foreach ($mybets as $value) {
             if ($value['lot-id'] == $item_id) {
                 $is_bet = true;
@@ -26,11 +29,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && $user) {
     $bet = $_POST;
     $bet['time'] = time();
-    $mybets[] = $bet;
-    setcookie('mylots', json_encode($mybets), strtotime('+7 days'));
-    header("Location: /mylots.php");
-    //$bet['cost'] = (int)$bet['cost']///;
-
+    $result = call_user_func('validateNumber', $bet['cost']);
+    if (!$result) {
+        $errors['cost'] = 'Введите целое число';
+    }
+    if (count($errors)) {
+        $page_content = renderTemplate('./templates/lot.php', ['categories' => $categories, 'item' => $goods[$item_id], 'bets' => $bets, 'is_bet' => $is_bet, 'lot_time_remaining' => $lot_time_remaining, 'user' => $user, 'errors' => $errors]);
+        $title = 'Лот №' . $item_id;
+    } else {
+        $mybets[] = $bet;
+        setcookie('mylots', json_encode($mybets), strtotime('+7 days'));
+        header("Location: /mylots.php");
+    }
 }
 $layout_content = renderTemplate('./templates/layout.php', ['title' => $title, 'content' => $page_content, 'categories' => $categories, 'user' => $user]);
 print($layout_content);

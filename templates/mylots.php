@@ -23,7 +23,7 @@
                 <div class="rates__img">
                     <img src="<?=$mybets[$cur_element]['picture_url'];?>" width="54" height="40" alt="<?=$mybets[$cur_element]['title'];?>">
                 </div>
-                <h3 class="rates__title"><a href="../lot.php?item_id=<?=$mybets[$cur_element]['lot_id'];?>"><?=$mybets[$cur_element]['title'];?></a></h3>
+                <h3 class="rates__title"><a href="lot.php?item_id=<?=$mybets[$cur_element]['lot_id'];?>"><?=$mybets[$cur_element]['title'];?></a></h3>
             </td>
             <td class="rates__category">
                 <?=$mybets[$cur_element]['category'];?>
