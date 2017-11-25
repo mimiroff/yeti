@@ -64,9 +64,10 @@ if(!$user) {
                 'picture_url' => $file_url
             ];
             $item_id = count($goods) - 1;
+            $is_bet = true;
             $goods[$item_id]['id'] = $item_id;
             $title = $item['lot-name'];
-            $page_content = renderTemplate('./templates/lot.php', ['categories' => $categories, 'item' => $goods[$item_id], 'bets' => $bets, 'user' => $user]);
+            $page_content = renderTemplate('./templates/lot.php', ['categories' => $categories, 'item' => $goods[$item_id], 'bets' => $bets, 'user' => $user, 'is_bet' => $is_bet]);
         }
     }
 }
