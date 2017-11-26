@@ -8,7 +8,6 @@ $errors = [];
 $mybets = isset($_COOKIE['mylots']) ? json_decode($_COOKIE['mylots'], true) : [];
 $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 $item_id = isset($_SESSION['item_id']) ? $_SESSION['item_id'] : null;
-$is_bet = false;
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($_GET['item_id']) && array_key_exists($_GET['item_id'], $goods)) {
         $_SESSION['item_id'] = $_GET['item_id'];
@@ -27,6 +26,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $page_content = renderTemplate('./templates/error.php', ['message' => 'Страница не найдена']);
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    foreach ($mybets as $value) {
+        if ($value['lot-id'] == $item_id) {
+            $is_bet = true;
+            break;
+        }
+    }
     if($is_bet || !$user) {
         $title = 403;
         http_response_code($title);
