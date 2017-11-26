@@ -25,7 +25,7 @@ function get_past_time ($timestamp) {
 };
 
 function validateNumber($value) {
-    return filter_var($value, FILTER_VALIDATE_FLOAT);
+    return filter_var($value, FILTER_VALIDATE_INT);
 };
 
 function validateEmail($value) {
@@ -42,4 +42,13 @@ function searchUserByEmail($email, $users) {
   }
   return $result;
 };
+
+function find_matching_in_array($array, $array_key, $matching_value) {
+    foreach ($array as $value) {
+        if ($value[$array_key] == $matching_value) {
+            return true;
+        }
+    }
+    return false;
+}
  ?>

@@ -12,7 +12,7 @@
 </ul>
 </nav>
   <?php $classname = isset($errors) ? 'form--invalid' : '';?>
-  <form class="form form--add-lot container <?=$classname;?>" action="../add.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
+  <form class="form form--add-lot container <?=$classname;?>" action="add.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
     <h2>Добавление лота</h2>
     <div class="form__container-two">
     <?php $classname = isset($errors['lot-name']) ? 'form__item--invalid' : '';

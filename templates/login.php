@@ -12,7 +12,7 @@
     </ul>
 </nav>
 <?php $classname = isset($errors) ? 'form--invalid' : '';?>
-<form class="form container" action="../login.php" method="post" <?=$classname;?>> <!-- form--invalid -->
+<form class="form container" action="login.php" method="post" <?=$classname;?>> <!-- form--invalid -->
     <h2>Вход</h2>
     <?php $classname = isset($errors['email']) ? 'form__item--invalid' : '';
     $value = isset($fields['email']) ? $fields['email'] : '';
