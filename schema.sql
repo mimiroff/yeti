@@ -11,7 +11,7 @@ CREATE TABLE users (
   name VARCHAR(128) NOT NULL,
   picture VARCHAR(255),
   contacts TEXT NOT NULL,
-  is_deleted TINYINT(1) UNSIGNED
+  is_deleted TINYINT(1) UNSIGNED DEFAULT 0
 );
 
 CREATE TABLE bets (
@@ -20,8 +20,8 @@ CREATE TABLE bets (
   cost INT UNSIGNED NOT NULL,
   user_id INT UNSIGNED NOT NULL,
   lot_id INT UNSIGNED NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users(id),
-  FOREIGN KEY (lot_id) REFERENCES lots(id)
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (lot_id) REFERENCES lots(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE lots (
@@ -36,8 +36,8 @@ CREATE TABLE lots (
   author_id INT UNSIGNED,
   winner_id INT UNSIGNED,
   category_id INT UNSIGNED NOT NULL,
-  FOREIGN KEY (author_id, winner_id) REFERENCES users(id),
-  FOREIGN KEY (category_id) REFERENCES categories(id)
+  FOREIGN KEY (author_id, winner_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE UNIQUE INDEX email ON users(email);
@@ -48,4 +48,3 @@ CREATE INDEX l_date ON lots(date);
 CREATE INDEX l_exp ON lots(expire_date);
 CREATE INDEX l_price ON lots(price);
 CREATE INDEX l_name ON lots(name);
-CREATE INDEX l_desc ON lots(description);
