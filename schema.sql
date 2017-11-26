@@ -1,39 +1,43 @@
 CREATE TABLE categories (
-  id INT(3) AUTO_INCREMENT PRIMARY KEY,
+  id INT(3) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   category CHAR(128)
 );
 
 CREATE TABLE users (
-  id INT(11) AUTO_INCREMENT PRIMARY KEY,
+  id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(255),
   password CHAR(32),
   register_data DATETIME,
   name CHAR(64),
   picture CHAR(255),
   contacts TEXT,
-  is_deleted TINYINT(1)
+  is_deleted TINYINT(1) UNSIGNED
 );
 
 CREATE TABLE bets (
-  id INT(50) AUTO_INCREMENT PRIMARY KEY,
+  id INT(50) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   date DATETIME,
-  cost INT,
-  user_id INT,
-  lot_id INT
+  cost INT UNSIGNED,
+  user_id INT UNSIGNED,
+  lot_id INT UNSIGNED,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (lot_id) REFERENCES lots(id)
 );
 
 CREATE TABLE lots (
-  id INT(50) AUTO_INCREMENT PRIMARY KEY,
+  id INT(50) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   date DATETIME,
   name CHAR(255),
   description TEXT,
   picture CHAR(255),
-  price INT,
+  price INT UNSIGNED,
   expire_date DATETIME,
-  step INT,
-  author_id INT,
-  winner_id INT,
-  category_id INT
+  step INT UNSIGNED,
+  author_id INT UNSIGNED,
+  winner_id INT UNSIGNED,
+  category_id INT UNSIGNED,
+  FOREIGN KEY (author_id, winner_id) REFERENCES users(id),
+  FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
 CREATE UNIQUE INDEX email ON users(email);
