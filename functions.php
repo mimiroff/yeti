@@ -42,4 +42,13 @@ function searchUserByEmail($email, $users) {
   }
   return $result;
 };
+
+function find_matching_in_array($array, $array_key, $matching_value) {
+    foreach ($array as $value) {
+        if ($value[$array_key] == $matching_value) {
+            return true;
+        }
+    }
+    return false;
+}
  ?>
