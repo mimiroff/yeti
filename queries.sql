@@ -34,14 +34,14 @@ SELECT * FROM categories;
 
 # получить самые новые, открытые лоты. Каждый лот должен включать название,
 # стартовую цену, ссылку на изображение, цену, количество ставок, название категории
-SELECT name, price, picture, MAX(cost), COUNT(b.id), category FROM lots l
-  JOIN bets b ON l.id = b.lot_id JOIN categories c ON l.category_id = c.id WHERE is_closed = 0 GROUP BY l.id;
+SELECT l.id, l.name, l.price, l.picture, MAX(b.cost), COUNT(b.id), category FROM lots l
+  LEFT JOIN bets b ON l.id = b.lot_id JOIN categories c ON l.category_id = c.id WHERE l.winner_id IS NULL GROUP BY l.id;
 
 # найти лот по его названию или описанию
-SELECT * FROM lots WHERE name = 'Маска Oakley Canopy' OR description = 'Маска Oakley Canopy';
+SELECT * FROM lots WHERE name LIKE '%маска%' OR description LIKE '%маска%';
 
 # обновить название лота по его идентификатору
-UPDATE lots SET name = 'Крепления Union Contact Pro 2015 года размер M/L' WHERE id = 3;
+UPDATE lots SET name = 'Крепления Union Contact' WHERE id = 3;
 
 # получить список самых свежих ставок для лота по его идентификатору
-SELECT * FROM bets WHERE lot_id = 3;
+SELECT * FROM bets WHERE lot_id = 3 ORDER BY date DESC;
