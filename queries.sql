@@ -35,7 +35,7 @@ SELECT * FROM categories;
 # получить самые новые, открытые лоты. Каждый лот должен включать название,
 # стартовую цену, ссылку на изображение, цену, количество ставок, название категории
 SELECT l.id, l.name, l.price, l.picture, MAX(b.cost), COUNT(b.id), category FROM lots l
-  LEFT JOIN bets b ON l.id = b.lot_id JOIN categories c ON l.category_id = c.id WHERE l.winner_id IS NULL GROUP BY l.id;
+  LEFT JOIN bets b ON l.id = b.lot_id LEFT JOIN categories c ON l.category_id = c.id WHERE l.winner_id IS NULL GROUP BY l.id;
 
 # найти лот по его названию или описанию
 SELECT * FROM lots WHERE name LIKE '%маска%' OR description LIKE '%маска%';
