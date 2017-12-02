@@ -41,7 +41,7 @@ SELECT l.id, l.name, l.price, l.picture, MAX(b.cost), COUNT(b.id), category FROM
 SELECT * FROM lots WHERE name LIKE '%маска%' OR description LIKE '%маска%';
 
 # обновить название лота по его идентификатору
-UPDATE lots SET name = 'Крепления Union Contact' WHERE id = 3;
+# UPDATE lots SET name = 'Крепления Union Contact' WHERE id = 3;
 
 # получить список самых свежих ставок для лота по его идентификатору
 SELECT * FROM bets WHERE lot_id = 3 ORDER BY date DESC;
