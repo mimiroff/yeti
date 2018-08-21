@@ -1,16 +1,3 @@
-<nav class="nav">
-    <?php
-    $element_count = count($categories);
-    $cur_element = 0;
-    ?>
-    <ul class="nav__list container">
-        <?php while ($cur_element < $element_count) { ?>
-            <li class="nav__item">
-                <a href=""><?=$categories[$cur_element];?></a>
-            </li>
-            <?php $cur_element++; } ?>
-    </ul>
-</nav>
 <?php $classname = isset($errors) ? 'form--invalid' : '';?>
 <form class="form container" action="login.php" method="post" <?=$classname;?>> <!-- form--invalid -->
     <h2>Вход</h2>

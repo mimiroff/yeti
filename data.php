@@ -1,4 +1,6 @@
 <?php
+require_once('init.php');
+
 $is_auth = (bool) rand(0, 1);
 
 $user_name = 'Константин';
@@ -22,7 +24,10 @@ $lot_minutes_remaininig = str_pad((string) floor((($tomorrow - $now) % 3600) / 6
 $lot_time_remaining = $lot_hours_remaining.':'.$lot_minutes_remaininig;
 //$lot_time_remaining = gmdate("H:i:s", $tomorrow - $now);
 
-$categories = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];
+$lots = [];
+$bets = [];
+
+$sql = 'SELECT * FROM bets';
 
 $goods = [
     [

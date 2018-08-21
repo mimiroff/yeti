@@ -6,26 +6,29 @@ require_once('init.php');
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
+
 $errors = [];
-$mybets = isset($_COOKIE['mylots']) ? json_decode($_COOKIE['mylots'], true) : [];
 $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+$mybets = $user ? get_user_bets($link, $user['id']) : [];
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    if (isset($_GET['item_id']) && array_key_exists($_GET['item_id'], $goods)) {
+    if (isset($_GET['item_id']) && find_row($link, $_GET['item_id'])) {
         $item_id = $_GET['item_id'];
-        $is_bet = find_matching_in_array($mybets, 'lot-id', $item_id);
-        $page_content = renderTemplate('./templates/lot.php', ['categories' => $categories, 'item' => $goods[$item_id], 'bets' => $bets, 'is_bet' => $is_bet, 'lot_time_remaining' => $lot_time_remaining, 'user' => $user]);
+        $is_bet = find_matching_in_array($mybets, 'lot_id', $item_id);
+        $is_author = check_author($link, $user['id'], $item_id);
+        $is_time_left = is_time_left(get_current_lot($link, $item_id)[0]['expire_date']);
+        $page_content = renderTemplate('./templates/lot.php', ['item' => get_current_lot($link, $item_id)[0], 'bets' => get_lot_bets($link, $item_id), 'is_bet' => $is_bet, 'is_author' => $is_author, 'is_time_left' => $is_time_left, 'user' => $user]);
         $title = 'Лот №' . $item_id;
     } else {
         $title = 404;
         http_response_code($title);
-        $page_content = renderTemplate('./templates/error.php', ['message' => 'Страница не найдена']);
+        render_error($title, http_response_code(), 'Страница не найдена');
     }
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $is_bet = find_matching_in_array($mybets, 'lot-id', $_POST['lot-id']);
     if($is_bet || !$user) {
         $title = 403;
-        http_response_code($title);
-        $page_content = renderTemplate('./templates/error.php', ['message' => 'Доступ запрещен']);
+        render_error($title, http_response_code($title), 'Доступ запрещён');
     } else {
         $bet['cost'] = $_POST['cost'];
         $bet['lot-id'] = $_POST['lot-id'];
@@ -35,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $errors['cost'] = 'Введите целое число';
         }
         if (count($errors)) {
-            $page_content = renderTemplate('./templates/lot.php', ['categories' => $categories, 'item' => $goods[$bet['lot-id']], 'bets' => $bets, 'is_bet' => $is_bet, 'lot_time_remaining' => $lot_time_remaining, 'user' => $user, 'errors' => $errors]);
+            $page_content = renderTemplate('./templates/lot.php', ['item' => $goods[$bet['lot-id']], 'bets' => $bets, 'is_bet' => $is_bet, 'lot_time_remaining' => $lot_time_remaining, 'user' => $user, 'errors' => $errors]);
             $title = 'Лот №' . $bet['lot-id'];
         } else {
             $mybets[] = $bet;
@@ -44,6 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     }
 }
-$layout_content = renderTemplate('./templates/layout.php', ['title' => $title, 'content' => $page_content, 'categories' => $categories, 'user' => $user]);
+$layout_content = renderTemplate('./templates/layout.php', ['title' => $title, 'content' => $page_content, 'categories' => get_category_list($link), 'user' => $user]);
 print($layout_content);
 ?>

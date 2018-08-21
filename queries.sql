@@ -7,12 +7,12 @@ INSERT INTO users (email, password, register_date, name, contacts) VALUES
   ('warrior07@mail.ru', '$2y$10$2OxpEH7narYpkOT1H5cApezuzh10tZEEQ2axgFOaKW.55LxIJBgWW', '2017-11-25 12:00:00', 'Руслан', 'warrior07@mail.ru');
 
 INSERT INTO lots (date, name, description, picture, price, expire_date, author_id, category_id) VALUES
-  ('2017-11-25 12:00:00', '2014 Rossignol District Snowboard', name, 'img/lot-1.jpg', 10999, '2017-12-05 00:00:00', 1, 1),
-  ('2017-11-25 12:30:00', 'DC Ply Mens 2016/2017 Snowboard', name, 'img/lot-2.jpg', 159999, '2017-12-05 00:30:00', 3, 1),
-  ('2017-11-25 12:40:00', 'Крепления Union Contact Pro 2015 года размер L/XL', name, 'img/lot-3.jpg', 8000, '2017-12-05 00:40:00', 2, 2),
-  ('2017-11-25 12:45:00', 'Ботинки для сноуборда DC Mutiny Charocal', name, 'img/lot-4.jpg', 10999, '2017-12-05 00:45:00', 3, 3),
-  ('2017-11-25 13:00:00', 'Куртка для сноуборда DC Mutiny Charocal', name, 'img/lot-5.jpg', 7500, '2017-12-05 13:00:00', 1, 4),
-  ('2017-11-25 13:20:00', 'Маска Oakley Canopy', name, 'img/lot-6.jpg', 5400, '2017-12-05 13:20:00', 2, 6);
+  ('2017-11-25 12:00:00', '2014 Rossignol District Snowboard', name, 'img/lot-1.jpg', 10999, '2017-12-25 00:00:00', 1, 1),
+  ('2017-11-25 12:30:00', 'DC Ply Mens 2016/2017 Snowboard', name, 'img/lot-2.jpg', 159999, '2017-12-26 00:30:00', 3, 1),
+  ('2017-11-25 12:40:00', 'Крепления Union Contact Pro 2015 года размер L/XL', name, 'img/lot-3.jpg', 8000, '2017-12-31 00:40:00', 2, 2),
+  ('2017-11-25 12:45:00', 'Ботинки для сноуборда DC Mutiny Charocal', name, 'img/lot-4.jpg', 10999, '2017-12-29 00:45:00', 3, 3),
+  ('2017-11-25 13:00:00', 'Куртка для сноуборда DC Mutiny Charocal', name, 'img/lot-5.jpg', 7500, '2017-12-18 13:00:00', 1, 4),
+  ('2017-11-25 13:20:00', 'Маска Oakley Canopy', name, 'img/lot-6.jpg', 5400, '2017-12-27 13:20:00', 2, 6);
 
 INSERT INTO bets (date, cost, user_id, lot_id) VALUES
   ('2017-11-25 12:10:00', 11500, 3, 1),

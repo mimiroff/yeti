@@ -1,4 +1,6 @@
 <?php
+require_once ('functions.php');
+require_once ('init.php');
 
 // пользователи для аутентификации
 $users = [
@@ -18,3 +20,4 @@ $users = [
         'password' => '$2y$10$2OxpEH7narYpkOT1H5cApezuzh10tZEEQ2axgFOaKW.55LxIJBgWW'
     ]
 ];
+

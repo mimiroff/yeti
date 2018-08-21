@@ -19,7 +19,7 @@ $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
 if (!$user) {
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-        $page_content = renderTemplate('./templates/login.php', ['categories' => $categories]);
+        $page_content = renderTemplate('./templates/login.php', []);
     } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $fields = $_POST;
 
@@ -29,10 +29,9 @@ if (!$user) {
             }
         }
         if (!count($errors)) {
-            if ($user = searchUserByEmail($fields['email'], $users)) {
-                if (password_verify($fields['password'], $user['password'])) {
-                    $user['user_pic'] = $user_avatar;
-                    $_SESSION['user'] = $user;
+            if ($user = searchUserByEmail($link, $fields['email'])) {
+                if (password_verify($fields['password'], $user[0]['password'])) {
+                    $_SESSION['user'] = $user[0];
                 } else {
                     $errors['password'] = $errors_messages['auth']['password'];
                 }
@@ -42,7 +41,7 @@ if (!$user) {
         }
 
         if (count($errors)) {
-            $page_content = renderTemplate('./templates/login.php', ['categories' => $categories, 'fields' => $fields, 'errors' => $errors]);
+            $page_content = renderTemplate('./templates/login.php', ['fields' => $fields, 'errors' => $errors]);
         } else {
             header("Location: /index.php");
             exit();
@@ -53,7 +52,6 @@ if (!$user) {
     exit();
 }
 
-$layout_content = renderTemplate('./templates/layout.php', ['title' => $title, 'content' => $page_content, 'categories' => $categories, 'user' => $user]);
+$layout_content = renderTemplate('./templates/layout.php', ['title' => $title, 'content' => $page_content, 'categories' => get_category_list($link), 'user' => $user]);
 
 print($layout_content);
-?>
